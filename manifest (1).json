@@ -1,0 +1,33 @@
+{
+  "background_color": "#ffffff",
+  "dir": "auto",
+  "display": "fullscreen",
+  "name": "Sirna Gabaasa Galii",
+  "orientation": "any",
+  "scope": "./",
+  "short_name": "Magaalaa Baroodaa",
+  "start_url": "https://kedirmikael.github.io/index.html/",
+  "theme_color": "#ffffff",
+  "lang": "om",
+  "categories": [
+    "business"
+  ],
+  "edge_side_panel": {
+    "preferred_width": -1
+  },
+  "display_override": [
+    "minimal-ui",
+    "window-controls-overlay",
+    "browser",
+    "fullscreen"
+  ],
+  "prefer_related_applications": true,
+  "iarc_rating_id": "https://kedirmikael.github.io/index.html/",
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://kedirmikael.github.io/index.html/",
+      "id": null
+    }
+  ]
+}
