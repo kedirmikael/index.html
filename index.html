@@ -1,0 +1,465 @@
+﻿<!DOCTYPE html>
+<html lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sirna Gabaasa Galii Guyyaa Guyyaa</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      max-width: 740px;
+      width: 100%;
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #e2e8f0;
+      color: #334155;
+      margin-top: 0;
+    }
+    .tab-btn.active {
+      background-color: #1e3a8a;
+      color: #ffffff;
+    }
+    h2, h3 {
+      text-align: center;
+      color: #1e3a8a;
+      margin-top: 5px;
+    }
+    label {
+      display: block;
+      margin-top: 14px;
+      font-weight: 600;
+      color: #334155;
+      font-size: 14px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background-color: #1e3a8a;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .action-btn:hover { background-color: #1d4ed8; }
+    .action-btn:disabled { background-color: #93c5fd; cursor: not-allowed; }
+    .btn-secondary {
+      background-color: #0f766e;
+      margin-top: 6px;
+      width: auto;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+    .btn-secondary:hover { background-color: #0d9488; }
+    .status {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 15px;
+    }
+    .success { color: #15803d; }
+    .error { color: #b91c1c; }
+    .hidden { display: none; }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .controls-row input[type="date"] {
+      flex: 1;
+      min-width: 180px;
+      margin-top: 6px;
+    }
+
+    /* Dashboard Cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+    }
+    .card-title { font-size: 13px; color: #64748b; font-weight: 600; }
+    .card-val { font-size: 18px; color: #0f172a; font-weight: bold; margin-top: 6px; }
+    .card.total { background: #eff6ff; border-color: #bfdbfe; }
+    .card.total .card-val { color: #1e3a8a; }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+    th { background-color: #f8fafc; color: #334155; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tabFormBtn" onclick="switchTab('form')">Unka Galii (Sassaabaa)</button>
+    <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admin')">Admin Dashboard</button>
+  </div>
+
+  <!-- 1. UNKA GALII (COLLECTOR FORM) -->
+  <div id="formSection">
+    <h2>Gabaasa Galii Guyyaa Guyyaa</h2>
+    <form id="galiiForm">
+      <label for="guyyaa">Guyyaa Galii Sassaabamee *</label>
+      <input type="date" id="guyyaa" required>
+
+      <label for="maqaa">Maqaa Sassaabaa / ID *</label>
+      <select id="maqaa" required>
+        <option value="">-- Sassaabaa Filadhu --</option>
+      </select>
+
+      <label for="gosa">Gosa Galii / Bakka *</label>
+      <select id="gosa" required>
+        <option value="">-- Gosa Galii Filadhu --</option>
+      </select>
+
+      <label for="mallaqa">Mallaqa Sassaabame (ETB) *</label>
+      <input type="number" id="mallaqa" min="1" step="any" placeholder="Fkn. 2500" required>
+
+      <label for="haala">Haala Kaffaltii *</label>
+      <select id="haala" required>
+        <option value="">-- Haala Kaffaltii Filadhu --</option>
+        <option value="Cash (Callaadhhaan)">Cash (Callaadhhaan)</option>
+        <option value="Mobile Banking / Telebirr">Mobile Banking / Telebirr</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+      </select>
+
+      <label for="nagahee">Lakkoofsa Nagahee / Transaction ID (Optional)</label>
+      <input type="text" id="nagahee" placeholder="Yoo jiraate galchi">
+
+      <label for="yaada">Yaada Dabalataa (Optional)</label>
+      <textarea id="yaada" rows="2" placeholder="Ibsa yoo qabaatte..."></textarea>
+
+      <button type="submit" id="submitBtn" class="action-btn">Gabaasa Ergi</button>
+      <div id="statusMsg" class="status"></div>
+    </form>
+  </div>
+
+  <!-- 2. ADMIN DASHBOARD -->
+  <div id="adminSection" class="hidden">
+    <!-- Login Box -->
+    <div id="adminLoginBox">
+      <h3>Seensa Bulchaa (Admin Login)</h3>
+      <label for="adminPass">Password Galchi:</label>
+      <input type="password" id="adminPass" placeholder="Password...">
+      <button type="button" class="action-btn" onclick="checkAdminPass()">Seeni</button>
+      <div id="loginError" class="status error"></div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div id="dashboardContent" class="hidden">
+      <h2>Gabaasa Galii Bulchaa</h2>
+      <label for="filterDate">Guyyaa Gabaasa Ilaaluuf Filadhu:</label>
+      <div class="controls-row">
+        <input type="date" id="filterDate" onchange="renderDashboard()">
+        <button type="button" class="action-btn btn-secondary" onclick="loadData()">Haaromsi</button>
+        <button type="button" class="action-btn btn-secondary" onclick="exportToCSV()">CSV Buufadhu</button>
+      </div>
+
+      <div id="loadingMsg" class="status"></div>
+
+      <!-- Summary Cards -->
+      <div class="summary-grid">
+        <div class="card total">
+          <div class="card-title">Ida'ama Waliigalaa</div>
+          <div class="card-val" id="sumTotal">0 ETB</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Cash</div>
+          <div class="card-val" id="sumCash">0 ETB</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Mobile / Telebirr</div>
+          <div class="card-val" id="sumMobile">0 ETB</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Bank Transfer</div>
+          <div class="card-val" id="sumBank">0 ETB</div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Sassaabaa</th>
+              <th>Gosa Galii</th>
+              <th>Mallaqa</th>
+              <th>Haala Kaffaltii</th>
+              <th>Nagahee</th>
+            </tr>
+          </thead>
+          <tbody id="reportTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyG1l1zaM-rQWCH_S6Z65aGDhQZO5HBOSI3PR04Uy5AX_lpLDgoXM3ZQ791_1Pzy_Sk/exec";
+  const ADMIN_PASSWORD = "Admin1517"; // Fkn. "Admin2026"
+
+  // MAQAA SASSAABDOTA FI GOSOTA GALII AS IRRAA JIJJIIRI
+  const COLLECTORS = [
+    "S-01: Abdii Hassan",
+    "S-02: Abraahim Mahammad",
+    "S-03: Bayaan Aadam"
+    "S-04: Mahammad Abdalla"
+    "S-05: Siraj Usmaail"
+    "S-06: Iftuu Mahammad"
+    "S-07: Abdii Ahmad"
+  ];
+
+  const INCOME_TYPES = [
+    "Baaxii Gooroo",
+    "Gibira Lafa Qona",
+    "Jimaa",
+    "Liizii DD",
+    "Liizii DB",
+    "Kaartaa",
+    "Parsantaa",
+    "Hayama ijaarumsaa",
+    "Miila Maandiisaa",
+    "Kaffaltii Tajaajilaa",
+    "Kan Biroo"
+  ];
+
+  let allRecords = [];
+  let currentFilteredRecords = [];
+
+  // Dropdowns otomaatikii guutuuf
+  function populateDropdowns() {
+    const maqaaSelect = document.getElementById('maqaa');
+    COLLECTORS.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      maqaaSelect.appendChild(opt);
+    });
+
+    const gosaSelect = document.getElementById('gosa');
+    INCOME_TYPES.forEach(type => {
+      const opt = document.createElement('option');
+      opt.value = type;
+      opt.textContent = type;
+      gosaSelect.appendChild(opt);
+    });
+  }
+
+  populateDropdowns();
+
+  // Guyyaa har'aa qindeessi
+  const todayStr = new Date().toISOString().split('T')[0];
+  document.getElementById('guyyaa').value = todayStr;
+  document.getElementById('filterDate').value = todayStr;
+
+  function switchTab(tab) {
+    if (tab === 'form') {
+      document.getElementById('formSection').classList.remove('hidden');
+      document.getElementById('adminSection').classList.add('hidden');
+      document.getElementById('tabFormBtn').classList.add('active');
+      document.getElementById('tabAdminBtn').classList.remove('active');
+    } else {
+      document.getElementById('formSection').classList.add('hidden');
+      document.getElementById('adminSection').classList.remove('hidden');
+      document.getElementById('tabFormBtn').classList.remove('active');
+      document.getElementById('tabAdminBtn').classList.add('active');
+    }
+  }
+
+  // Galii Erguu
+  document.getElementById('galiiForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const statusMsg = document.getElementById('statusMsg');
+
+    btn.disabled = true;
+    btn.innerText = "Ergaa jira...";
+    statusMsg.innerText = "";
+
+    const payload = {
+      guyyaa: document.getElementById('guyyaa').value,
+      maqaa: document.getElementById('maqaa').value,
+      gosa: document.getElementById('gosa').value,
+      mallaqa: document.getElementById('mallaqa').value,
+      haala: document.getElementById('haala').value,
+      nagahee: document.getElementById('nagahee').value,
+      yaada: document.getElementById('yaada').value
+    };
+
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
+      statusMsg.className = "status success";
+      statusMsg.innerText = "Gabaasni keessan milkaa'inaan ergameera!";
+      document.getElementById('galiiForm').reset();
+      document.getElementById('guyyaa').value = todayStr;
+    })
+    .catch(() => {
+      statusMsg.className = "status error";
+      statusMsg.innerText = "Dogoggorri uumameera. Irra deebi'aa yaalaa.";
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.innerText = "Gabaasa Ergi";
+    });
+  });
+
+  // Admin Login
+  function checkAdminPass() {
+    const inputPass = document.getElementById('adminPass').value;
+    if (inputPass === ADMIN_PASSWORD) {
+      document.getElementById('adminLoginBox').classList.add('hidden');
+      document.getElementById('dashboardContent').classList.remove('hidden');
+      loadData();
+    } else {
+      document.getElementById('loginError').innerText = "Password dogoggoraa galchitan!";
+    }
+  }
+
+  // Daataa Google Sheets irraa fiduu
+  function loadData() {
+    const loadingMsg = document.getElementById('loadingMsg');
+    loadingMsg.className = "status";
+    loadingMsg.innerText = "Daataa fidaa jira...";
+
+    fetch(SCRIPT_URL)
+      .then(res => res.json())
+      .then(data => {
+        allRecords = data;
+        loadingMsg.innerText = "";
+        renderDashboard();
+      })
+      .catch(() => {
+        loadingMsg.className = "status error";
+        loadingMsg.innerText = "Daataa fiduun hin danda'amne. Linkii SCRIPT_URL mirkaneessi.";
+      });
+  }
+
+  // Guyyaa filatameef gabaasa herreguu
+  function renderDashboard() {
+    const selectedDate = document.getElementById('filterDate').value;
+    currentFilteredRecords = allRecords.filter(r => r.guyyaa === selectedDate);
+
+    let total = 0, cash = 0, mobile = 0, bank = 0;
+    const tbody = document.getElementById('reportTableBody');
+    tbody.innerHTML = "";
+
+    currentFilteredRecords.forEach(item => {
+      total += item.mallaqa;
+      if (item.haala.includes("Cash")) cash += item.mallaqa;
+      else if (item.haala.includes("Mobile")) mobile += item.mallaqa;
+      else if (item.haala.includes("Bank")) bank += item.mallaqa;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${item.maqaa}</td>
+        <td>${item.gosa}</td>
+        <td><strong>${item.mallaqa.toLocaleString()}</strong></td>
+        <td>${item.haala}</td>
+        <td>${item.nagahee}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    if (currentFilteredRecords.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#64748b;">Guyyaa kanaaf galmeen hin argamne.</td></tr>`;
+    }
+
+    document.getElementById('sumTotal').innerText = total.toLocaleString() + " ETB";
+    document.getElementById('sumCash').innerText = cash.toLocaleString() + " ETB";
+    document.getElementById('sumMobile').innerText = mobile.toLocaleString() + " ETB";
+    document.getElementById('sumBank').innerText = bank.toLocaleString() + " ETB";
+  }
+
+  // Gabaasa guyyaa filatamee gara CSV buufachuuf
+  function exportToCSV() {
+    const selectedDate = document.getElementById('filterDate').value || "gabaasa";
+    if (currentFilteredRecords.length === 0) {
+      alert("Guyyaa kanaaf gabaasni buufamu hin jiru.");
+      return;
+    }
+
+    const headers = ["Guyyaa", "Sassaabaa", "Gosa Galii", "Mallaqa (ETB)", "Haala Kaffaltii", "Nagahee", "Yaada"];
+    const rows = currentFilteredRecords.map(r => [
+      r.guyyaa,
+      r.maqaa,
+      r.gosa,
+      r.mallaqa,
+      r.haala,
+      r.nagahee,
+      r.yaada
+    ]);
+
+    const csvContent = "\uFEFF" + [headers, ...rows]
+      .map(row => row.map(cell => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `gabaasa-galii-${selectedDate}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+</script>
+
+</body>
+</html>
