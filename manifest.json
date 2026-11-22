@@ -1,4 +1,6 @@
 {
+  "start_url":"https://kedirmikael.github.io/index.html/",
+  "scope":"./"
   "background_color": "#ffffff",
   "dir": "ltr",
   "display": "standalone",
