@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="om">
 <head>
   <meta charset="UTF-8">
@@ -246,8 +246,8 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyG1l1zaM-rQWCH_S6Z65aGDhQZO5HBOSI3PR04Uy5AX_lpLDgoXM3ZQ791_1Pzy_Sk/exec";
-  const ADMIN_PASSWORD = "Admin1517"; // Fkn. "Admin2026"
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbYG111zaM-rQWCH_S6Z65aGDDhQZO5HBOSI3PR04Uy5AX_lpLDgoxM3ZQ791_1Pzy_sk/exec";
+  const ADMIN_PASSWORD = "Admin1517";
 
   // MAQAA SASSAABDOTA FI GOSOTA GALII AS IRRAA JIJJIIRI
   const COLLECTORS = [
@@ -390,28 +390,42 @@
       });
   }
 
+  // Guyyaa gara YYYY-MM-DD sirreessuuf
+  function normalizeDate(val) {
+    if (!val) return "";
+    let s = String(val).trim();
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
+      return s.slice(0, 10);
+    }
+    if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
+      const [m, d, y] = s.split('/');
+      return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+    }
+    return s;
+  }
+
   // Guyyaa filatameef gabaasa herreguu
   function renderDashboard() {
-    const selectedDate = document.getElementById('filterDate').value;
-    currentFilteredRecords = allRecords.filter(r => r.guyyaa === selectedDate);
+    const selectedDate = normalizeDate(document.getElementById('filterDate').value);
+    currentFilteredRecords = allRecords.filter(r => normalizeDate(r.guyyaa) === selectedDate);
 
     let total = 0, cash = 0, mobile = 0, bank = 0;
     const tbody = document.getElementById('reportTableBody');
     tbody.innerHTML = "";
 
     currentFilteredRecords.forEach(item => {
-      total += item.mallaqa;
-      if (item.haala.includes("Cash")) cash += item.mallaqa;
-      else if (item.haala.includes("Mobile")) mobile += item.mallaqa;
-      else if (item.haala.includes("Bank")) bank += item.mallaqa;
+      total += Number(item.mallaqa) || 0;
+      if (item.haala && item.haala.includes("Cash")) cash += Number(item.mallaqa) || 0;
+      else if (item.haala && item.haala.includes("Mobile")) mobile += Number(item.mallaqa) || 0;
+      else if (item.haala && item.haala.includes("Bank")) bank += Number(item.mallaqa) || 0;
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${item.maqaa}</td>
         <td>${item.gosa}</td>
-        <td><strong>${item.mallaqa.toLocaleString()}</strong></td>
+        <td><strong>${(Number(item.mallaqa) || 0).toLocaleString()}</strong></td>
         <td>${item.haala}</td>
-        <td>${item.nagahee}</td>
+        <td>${item.nagahee || ""}</td>
       `;
       tbody.appendChild(tr);
     });
@@ -436,7 +450,7 @@
 
     const headers = ["Guyyaa", "Sassaabaa", "Gosa Galii", "Mallaqa (ETB)", "Haala Kaffaltii", "Nagahee", "Yaada"];
     const rows = currentFilteredRecords.map(r => [
-      r.guyyaa,
+      normalizeDate(r.guyyaa),
       r.maqaa,
       r.gosa,
       r.mallaqa,
